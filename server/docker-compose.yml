@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  backend:
+    build: .
+    # entrypoint: .docker/start.sh
+    tty: true
+    ports:
+      - 3333:8567
+    volumes:
+      - .:/home/node/backend/data
+    depends_on:
+      - database
+      - pg
+      - cache
+
+  database:
+    image: postgres
+    restart: always
+    tty: true
+    ports:
+      - 5432:5432
+    volumes:
+      - .docker/data:/var/lib/postgres/data
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=todofeito
+
+  pg:
+    image: dpage/pgadmin4
+    tty: true
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - 8080:80
+    depends_on:
+      - database
+
+  cache:
+    image: bitnami/redis:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes

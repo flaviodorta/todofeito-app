@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@base {
+  :root {
+    --text-7xl: 100px;
+  }
+}
